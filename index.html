@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Infinity LSPD System Helper</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f4f6f9; }
+    header { display: flex; align-items: center; margin-bottom: 20px; }
+    .logo { width: 50px; height: 50px; border-radius: 50%; background: #004aad; color: white; 
+            display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 20px; }
+    h1 { margin: 10px 0; }
+    p { max-width: 600px; }
+    .card { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    .entities-list { list-style: none; padding: 0; margin: 0; }
+    .entities-list li { padding: 12px 15px; border-bottom: 1px solid #ddd; cursor: pointer; }
+    .entities-list li:hover { background: #f0f0f0; }
+    .entities-list li:last-child { border-bottom: none; }
+    .modal-backdrop { position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+                      background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; }
+    .modal { background: white; padding: 20px; border-radius: 10px; width: 90%; max-width: 500px; }
+    label { display: block; margin-top: 10px; font-weight: bold; }
+    input, select, textarea { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 6px; }
+    button { margin-top: 15px; padding: 10px 15px; border: none; border-radius: 6px; cursor: pointer; }
+    .btn-primary { background: #004aad; color: white; }
+    .btn-secondary { background: #ddd; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">∞</div>
+    <div style="margin-left: 10px;">
+      <div><strong>LSPD</strong></div>
+      <small>infinity-lspd.benani.org</small>
+    </div>
+  </header>
+
+  <h1>LSPD System Helper</h1>
+  <p>Hello, this is a system to help the LSPD with their daily tasks. You can manage ranks, kits, polices, generations, users, kit groups, roles, vehicles, duty items, cadet scores and cadet instructors.</p>
+
+  <div class="card">
+    <h2>Explore your entities</h2>
+    <ul class="entities-list" id="entities">
+      <li data-entity="Polices">Polices</li>
+      <li data-entity="Ranks">Ranks</li>
+      <li data-entity="Kit Groups">Kit Groups</li>
+      <li data-entity="Kits">Kits</li>
+      <li data-entity="Generations">Generations</li>
+      <li data-entity="Police Vehicles">Police Vehicles</li>
+      <li data-entity="Duty Items">Duty Items</li>
+      <li data-entity="Stolen Vehicles">Stolen Vehicles</li>
+      <li data-entity="Star Records">Star Records</li>
+    </ul>
+  </div>
+
+  <h2>Preview (local)</h2>
+  <table>
+    <thead>
+      <tr><th>Type</th><th>Name</th><th>Details</th></tr>
+    </thead>
+    <tbody id="previewBody"></tbody>
+  </table>
+
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal">
+      <h2 id="modalTitle">Create Entity</h2>
+      <form id="entityForm">
+        <label>Entity Type
+          <select id="entityType">
+            <option>Polices</option>
+            <option>Ranks</option>
+            <option>Kit Groups</option>
+            <option>Kits</option>
+            <option>Generations</option>
+            <option>Police Vehicles</option>
+            <option>Duty Items</option>
+            <option>Stolen Vehicles</option>
+            <option>Star Records</option>
+          </select>
+        </label>
+        <label>Title / Name
+          <input type="text" id="entityName" required>
+        </label>
+        <label>Details
+          <textarea id="entityDetails"></textarea>
+        </label>
+        <div style="margin-top:15px; text-align:right;">
+          <button type="button" class="btn-secondary" onclick="hideModal()">Cancel</button>
+          <button type="submit" class="btn-primary">Create</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const entitiesList = document.getElementById('entities');
+    const modal = document.getElementById('modalBackdrop');
+    const form = document.getElementById('entityForm');
+    const previewBody = document.getElementById('previewBody');
+    const entityType = document.getElementById('entityType');
+    const entityName = document.getElementById('entityName');
+    const entityDetails = document.getElementById('entityDetails');
+    const modalTitle = document.getElementById('modalTitle');
+
+    entitiesList.addEventListener('click', e => {
+      if(e.target.dataset.entity){
+        entityType.value = e.target.dataset.entity;
+        modalTitle.textContent = 'Create ' + e.target.dataset.entity;
+        modal.style.display = 'flex';
+      }
+    });
+
+    function hideModal(){ modal.style.display = 'none'; }
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${entityType.value}</td><td>${entityName.value}</td><td>${entityDetails.value}</td>`;
+      previewBody.appendChild(tr);
+      form.reset();
+      hideModal();
+    });
+
+    window.addEventListener('click', e => {
+      if(e.target === modal) hideModal();
+    });
+  </script>
+</body>
+</html>
