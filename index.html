@@ -4,9 +4,153 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Infinity LSPD - Bennani</title>
+  <style>
+    :root{--bg:#0b1220;--card:#0f1724;--accent:#7c4dff;--muted:#9aa4b2}
+    *{box-sizing:border-box;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial}
+    body{margin:0;background:linear-gradient(180deg,#071021 0%, #071827 100%);color:#e6eef6}
+    header{display:flex;align-items:center;justify-content:space-between;padding:18px 28px;background:rgba(255,255,255,0.02);backdrop-filter:blur(6px)}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:44px;height:44px;border-radius:8px;background:linear-gradient(90deg,var(--accent),#4fd1c5);display:flex;align-items:center;justify-content:center;font-weight:700}
+    nav a{color:var(--muted);margin:0 10px;text-decoration:none}
+    .container{display:grid;grid-template-columns:280px 1fr;gap:20px;padding:22px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;padding:16px;box-shadow:0 6px 18px rgba(2,6,23,0.6)}
+    .sidebar .menu{display:flex;flex-direction:column;gap:8px}
+    .menu button{background:none;border:0;color:var(--muted);text-align:left;padding:10px;border-radius:8px;cursor:pointer}
+    .menu button.active{background:rgba(124,77,255,0.12);color:#fff}
+    .main-grid{display:grid;grid-template-columns:1fr 360px;gap:18px}
+    .table{width:100%;border-collapse:collapse}
+    .table th,.table td{padding:10px;text-align:left;border-bottom:1px dashed rgba(255,255,255,0.03);font-size:14px}
+    .badge{display:inline-block;padding:6px 10px;border-radius:999px;font-weight:600}
+    .search{display:flex;gap:10px}
+    .search input{flex:1;padding:8px 12px;border-radius:10px;border:0;background:#071827;color:#e6eef6}
+    .btn{background:var(--accent);border:0;padding:8px 12px;border-radius:8px;color:white;cursor:pointer}
+    footer{padding:18px;text-align:center;color:var(--muted);font-size:13px}
+    @media (max-width:880px){.container{grid-template-columns:1fr}.main-grid{grid-template-columns:1fr}}
+  </style>
 </head>
 <body>
-  <h1>Infinity LSPD</h1>
-  <p>Powered by bennani</p>
+  <header>
+    <div class="brand">
+      <div class="logo">∞</div>
+      <div>
+        <div style="font-weight:700">Infinity LSPD</div>
+        <div style="font-size:12px;color:var(--muted)">powered by bennani</div>
+      </div>
+    </div>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">Reports</a>
+      <a href="#">Staff</a>
+      <a href="#">Store</a>
+      <button class="btn" onclick="openLogin()">Sign in</button>
+    </nav>
+  </header>
+
+  <div class="container">
+    <aside class="sidebar card">
+      <h3 style="margin:0 0 12px 0">System</h3>
+      <div class="menu">
+        <button class="active" onclick="show('dashboard')">Dashboard</button>
+        <button onclick="show('reports')">Reports</button>
+        <button onclick="show('whitelist')">Whitelist</button>
+        <button onclick="show('vehicles')">Vehicles</button>
+        <button onclick="show('staff')">Staff Tools</button>
+        <button onclick="show('settings')">Settings</button>
+      </div>
+      <hr style="margin:12px 0;border:none;border-top:1px solid rgba(255,255,255,0.03)">
+      <div style="font-size:13px;color:var(--muted)">Server: <strong>infinity-lspd.bennani.org</strong></div>
+    </aside>
+
+    <main class="card">
+      <div id="dashboard" class="panel">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+          <h2 style="margin:0">Dashboard</h2>
+          <div class="search">
+            <input id="globalSearch" placeholder="Search players, plates, reports...">
+            <button class="btn" onclick="search()">Search</button>
+          </div>
+        </div>
+
+        <div class="main-grid">
+          <section>
+            <div style="display:flex;gap:12px;margin-bottom:12px">
+              <div class="card" style="flex:1"> 
+                <div style="font-size:12px;color:var(--muted)">Active Players</div>
+                <div style="font-size:28px;font-weight:700" id="activePlayers">0</div>
+              </div>
+              <div class="card" style="width:180px">
+                <div style="font-size:12px;color:var(--muted)">Open Reports</div>
+                <div style="font-size:28px;font-weight:700" id="openReports">0</div>
+              </div>
+            </div>
+
+            <div class="card" style="margin-bottom:12px">
+              <h3 style="margin:0 0 8px">Recent Reports</h3>
+              <table class="table" id="reportsTable">
+                <thead><tr><th>ID</th><th>From</th><th>Type</th><th>Status</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+
+            <div class="card">
+              <h3 style="margin:0 0 8px">Server Actions</h3>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <button class="btn" onclick="broadcast()">Broadcast Message</button>
+                <button class="btn" onclick="whitelistPlayer()">Whitelist Player</button>
+                <button class="btn" onclick="banPlayer()">Ban Player</button>
+                <button class="btn" onclick="teleportAll()">Teleport All</button>
+              </div>
+            </div>
+          </section>
+
+          <aside>
+            <div class="card" style="margin-bottom:12px">
+              <h4 style="margin:0 0 8px">Staff Online</h4>
+              <div id="staffList"></div>
+            </div>
+
+            <div class="card">
+              <h4 style="margin:0 0 8px">Quick Links</h4>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <a href="#">Open Admin Panel</a>
+                <a href="#">View Logs</a>
+                <a href="#">Player DB</a>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+      <div id="reports" class="panel" style="display:none"><h2>Reports</h2></div>
+      <div id="whitelist" class="panel" style="display:none"><h2>Whitelist Management</h2></div>
+      <div id="vehicles" class="panel" style="display:none"><h2>Vehicles</h2></div>
+      <div id="staff" class="panel" style="display:none"><h2>Staff Tools</h2></div>
+      <div id="settings" class="panel" style="display:none"><h2>Settings</h2></div>
+
+    </main>
+  </div>
+
+  <footer class="card" style="margin:16px 22px 34px 22px">© <strong>bennani</strong> — Infinity LSPD</footer>
+
+  <script>
+    const sampleReports = [{id:231,from:'Player123',type:'Bug',status:'Open'},{id:232,from:'Carlos',type:'Grief',status:'Investigating'},{id:233,from:'Maya',type:'Whitelist',status:'Closed'}];
+    const sampleStaff = ['Chief_Alpha','Officer_Benn','Mod_Zero'];
+
+    function render(){
+      document.getElementById('activePlayers').innerText = Math.floor(Math.random()*40)+5;
+      document.getElementById('openReports').innerText = sampleReports.filter(r=>r.status!=='Closed').length;
+      const tbody = document.querySelector('#reportsTable tbody'); tbody.innerHTML='';
+      sampleReports.forEach(r=>{ tbody.innerHTML+=`<tr><td>${r.id}</td><td>${r.from}</td><td>${r.type}</td><td><span class='badge'>${r.status}</span></td></tr>`});
+      document.getElementById('staffList').innerHTML = sampleStaff.map(s=>`<div style='padding:8px 0;border-bottom:1px dashed rgba(255,255,255,0.03)'>${s}</div>`).join('');
+    }
+    function show(id){document.querySelectorAll('.panel').forEach(p=>p.style.display='none');document.getElementById(id).style.display='block';document.querySelectorAll('.menu button').forEach(b=>b.classList.remove('active'));event.target.classList.add('active')}
+    function search(){alert('Searching for: '+document.getElementById('globalSearch').value)}
+    function broadcast(){const m = prompt('Broadcast message:'); if(m) alert('Sent: '+m)}
+    function whitelistPlayer(){const p = prompt('Identifier:'); if(p) alert('Whitelisted '+p)}
+    function banPlayer(){const p = prompt('Identifier:'); if(p) alert('Banned '+p)}
+    function teleportAll(){if(confirm('Teleport all players to spawn?')) alert('Done')}
+    function openLogin(){alert('Login demo')}
+    render();
+  </script>
 </body>
 </html>
