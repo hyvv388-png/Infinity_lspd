@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Infinity LSPD System Helper</title>
+  <style>
+    :root{
+      --bg:#ffffff;
+      --muted:#6b7280;
+      --card:#f8fafc;
+      --accent:#111827;
+      --accent-2:#0f172a;
+      --border:#e6e9ee;
+      --radius:12px;
+      --shadow: 0 6px 18px rgba(16,24,40,0.06);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background:linear-gradient(180deg,#ffffff 0%, #fbfdff 100%);
+      color:var(--accent);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:24px;
+    }
+    header{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      margin-bottom:20px;
+    }
+    .logo{
+      width:44px;height:44px;border-radius:8px;
+      display:flex;align-items:center;justify-content:center;
+      background:linear-gradient(180deg,#0ea5a9,#0369a1);
+      color:white;font-weight:700;font-size:18px;
+      box-shadow:var(--shadow);
+    }
+    .nav-btn{
+      margin-left:auto;
+      background:transparent;border:1px solid var(--border);
+      padding:6px 10px;border-radius:10px;
+    }
+    h1{
+      font-size:36px; margin:10px 0 6px;
+      letter-spacing:-0.5px;
+    }
+    p.lead{color:var(--muted);line-height:1.55;max-width:760px}
+    .container{max-width:920px;margin:0 auto}
+    .card{
+      background:var(--card);border-radius:var(--radius);
+      padding:0;margin-top:22px;border:1px solid var(--border);
+      box-shadow:var(--shadow);
+    }
+    .entities-list{list-style:none;padding:0;margin:0}
+    .entities-list li{
+      padding:18px 20px;border-bottom:1px solid var(--border);
+      display:flex;align-items:center;gap:12px;
+      cursor:pointer;
+    }
+    .entities-list li:last-child{border-bottom:0}
+    .entities-list li:hover{background:#fff}
+    .entity-title{font-size:18px}
+    .entity-sub{color:var(--muted);font-size:13px}
+    .explore-header{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--border)}
+    .btn{
+      background:#0b69ff;color:#fff;padding:8px 12px;border-radius:10px;border:0;cursor:pointer;
+      box-shadow:0 6px 12px rgba(11,105,255,0.14);
+    }
+    /* modal */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(2,6,23,0.45);display:none;align-items:center;justify-content:center;z-index:50}
+    .modal{background:white;border-radius:14px;max-width:720px;width:96%;padding:18px;border:1px solid var(--border)}
+    .modal h2{margin:0 0 8px}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    label{display:block;font-size:13px;margin-bottom:6px;color:var(--muted)}
+    input[type="text"],select,textarea{
+      width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);
+      font-size:14px;background:#fff;
+    }
+    textarea{min-height:90px;resize:vertical}
+    .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+    .muted{color:var(--muted);font-size:13px}
+    /* preview table */
+    table{width:100%;border-collapse:collapse;margin-top:14px}
+    th,td{padding:8px;border:1px solid var(--border);text-align:left;font-size:14px}
+    @media (max-width:720px){
+      h1{font-size:26px}
+      .form-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo" title="Infinity LSPD">
+        ∞
+      </div>
+      <div>
+        <div style="font-weight:600">LSPD</div>
+        <div class="muted" style="font-size:13px">infinity-lspd.benani.org</div>
+      </div>
+      <button class="nav-btn" aria-expanded="false" id="menuToggle">☰</button>
+    </header>
+
+    <main>
+      <h1>LSPD System Helper</h1>
+      <p class="lead">Hello, this is a system to help the LSPD with their daily tasks. You can manage ranks, kits, polices, generations, users, kit groups, roles, vehicles, duty items, cadet scores and cadet instructors.</p>
+
+      <section class="card" aria-labelledby="exploreTitle">
+        <div class="explore-header">
+          <div>
+            <strong id="exploreTitle" style="font-size:20px">Explore your entities</strong>
+            <div class="muted" style="font-size:13px">Click any item to open the creation form</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <button class="btn" id="openFormBtn">+ New entity</button>
+          </div>
+        </div>
+
+        <ul class="entities-list" id="entities">
+          <li data-entity="Polices"><div class="entity-title">Polices</div><div class="entity-sub">Manage police accounts & permissions</div></li>
+          <li data-entity="Ranks"><div class="entity-title">Ranks</div><div class="entity-sub">Create and order ranks</div></li>
+          <li data-entity="Kit Groups"><div class="entity-title">Kit Groups</div><div class="entity-sub">Group kits by role</div></li>
+          <li data-entity="Kits"><div class="entity-title">Kits</div><div class="entity-sub">Items for patrols</div></li>
+          <li data-entity="Generations"><div class="entity-title">Generations</div><div class="entity-sub">Cadet/season groups</div></li>
+          <li data-entity="Police Vehicles"><div class="entity-title">Police Vehicles</div><div class="entity-sub">Vehicle registry</div></li>
+          <li data-entity="Duty Items"><div class="entity-title">Duty Items</div><div class="entity-sub">Gear & equipment</div></li>
+          <li data-entity="Stolen Vehicles"><div class="entity-title">Stolen Vehicles</div><div class="entity-sub">Reported stolen list</div></li>
+          <li data-entity="Star Records"><div class="entity-title">Star Records</div><div class="entity-sub">Incidents & notes</div></li>
+        </ul>
+      </section>
+
+      <!-- Preview area for submitted entities -->
+      <section style="margin-top:18px">
+        <strong>Preview (local)</strong>
+        <div class="muted">This shows submitted items locally — hook to your backend endpoint to persist.</div>
+        <div id="previewContainer">
+          <table id="previewTable" aria-live="polite">
+            <thead><tr><th>Type</th><th>Title / Name</th><th>Details</th></tr></thead>
+            <tbody id="previewBody">
+              <!-- rows appear here -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal" role="document">
+      <h2 id="modalTitle">Create entity</h2>
+      <p class="muted" id="modalSub">Fill the details for the new entity.</p>
+
+      <form id="entityForm">
+        <div class="form-grid">
+          <div>
+            <label for="entityType">Entity type</label>
+            <select id="entityType" required>
+              <option value="Polices">Polices</option>
+              <option value="Ranks">Ranks</option>
+              <option value="Kit Groups">Kit Groups</option>
+              <option value="Kits">Kits</option>
+              <option value="Generations">Generations</option>
+              <option value="Police Vehicles">Police Vehicles</option>
+              <option value="Duty Items">Duty Items</option>
+              <option value="Stolen Vehicles">Stolen Vehicles</option>
+              <option value="Star Records">Star Records</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="entityName">Title / Name</label>
+            <input id="entityName" type="text" placeholder="e.g. Officer John" required />
+          </div>
+
+          <div>
+            <label for="entityIdentifier">Identifier / Code</label>
+            <input id="entityIdentifier" type="text" placeholder="e.g. 0001 or RANK-1" />
+          </div>
+
+          <div>
+            <label for="entityStatus">Status</label>
+            <select id="entityStatus">
+              <option>Active</option>
+              <option>Inactive</option>
+              <option>Pending</option>
+            </select>
+          </div>
+
+          <div style="grid-column:1 / -1">
+            <label for="entityDetails">Details / Description</label>
+            <textarea id="entityDetails" placeholder="Notes, permissions, item list, etc."></textarea>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" id="cancelBtn" class="nav-btn">Cancel</button>
+          <button type="submit" class="btn">Create</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Basic UI interactions
+    const modal = document.getElementById('modalBackdrop');
+    const openBtn = document.getElementById('openFormBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const entityForm = document.getElementById('entityForm');
+    const previewBody = document.getElementById('previewBody');
+    const entitiesList = document.getElementById('entities');
+
+    // open modal when clicking entity items or top button
+    openBtn.addEventListener('click', () => showModal());
+    entitiesList.addEventListener('click', (e) => {
+      const li = e.target.closest('li');
+      if(!li) return;
+      showModal(li.dataset.entity);
+    });
+
+    cancelBtn.addEventListener('click', hideModal);
+
+    function showModal(entityType){
+      const typeSelect = document.getElementById('entityType');
+      if(entityType) typeSelect.value = entityType;
+      modal.style.display = 'flex';
+      modal.setAttribute('aria-hidden', 'false');
+      document.getElementById('modalTitle').textContent = 'Create ' + (typeSelect.value || 'entity');
+      document.getElementById('entityName').focus();
+    }
+    function hideModal(){
+      modal.style.display = 'none';
+      modal.setAttribute('aria-hidden','true');
+      entityForm.reset();
+    }
+
+    // update modal title when selecting type
+    document.getElementById('entityType').addEventListener('change', function(){
+      document.getElementById('modalTitle').textContent = 'Create ' + this.value;
+    });
+
+    // local storage of created items (for demo only)
+    const stored = [];
+
+    entityForm.addEventListener('submit', function(e){
+      e.preventDefault();
+      const type = document.getElementById('entityType').value;
+      const name = document.getElementById('entityName').value.trim();
+      const id = document.getElementById('entityIdentifier').value.trim();
+      const status = document.getElementById('entityStatus').value;
+      const details = document.getElementById('entityDetails').value.trim();
+
+      const item = {type, name, id, status, details, createdAt: new Date().toISOString()};
+      stored.push(item);
+      addRowToPreview(item);
+      hideModal();
+    });
+
+    function addRowToPreview(item){
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${escapeHtml(item.type)}</td>
+                      <td>${escapeHtml(item.name)}${item.id ? ' <small class="muted">(' + escapeHtml(item.id) + ')</small>':''}</td>
+                      <td>${escapeHtml(item.details || item.status)}</td>`;
+      previewBody.prepend(tr);
+    }
+
+    function escapeHtml(s){
+      if(!s) return '';
+      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    // close modal on Escape
+    window.addEventListener('keydown', (e)=>{
+      if(e.key === 'Escape' && modal.style.display === 'flex') hideModal();
+    });
+
+    // small UX: clicking backdrop closes
+    modal.addEventListener('click', (e)=>{
+      if(e.target === modal) hideModal();
+    });
+
+    // initial demo entries
+    const demo = [
+      {type:'Ranks', name:'Sergeant', id:'R-03', status:'Active', details:'Supervisory rank'},
+      {type:'Police Vehicles', name:'Patrol - 72', id:'V-072', status:'Active', details:'Marked patrol car'}
+    ];
+    demo.forEach(addRowToPreview);
+  </script>
+</body>
+</html>
