@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="LSPD Gun License Plans - Apply for your gun license with different tier options in the Los Santos Police Department.">
+    <meta name="keywords" content="gun license, LSPD license, weapon permit, police license">
+    <meta name="author" content="LSPD Roleplay Community">
+    
+    <!-- Open Graph Protocol -->
+    <meta property="og:title" content="LSPD Gun License Plans">
+    <meta property="og:description" content="Apply for your gun license with different tier options.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://lspd-rp.example.com/gun-license.html">
+    
+    <title>LSPD Gun License Plans</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="logo">
+                    <span class="logo-text">LSPD</span>
+                </div>
+                <button class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="members.html" class="nav-link">Members</a></li>
+                    <li><a href="duty-items.html" class="nav-link">Duty Equipment</a></li>
+                    <li><a href="vehicles.html" class="nav-link">Vehicles</a></li>
+                    <li><a href="gun-license.html" class="nav-link active">Gun License</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Gun License Plans</h1>
+            <p>Choose Your License Tier</p>
+        </div>
+    </section>
+
+    <!-- License Plans Section -->
+    <section class="license-plans-section">
+        <div class="container">
+            <div class="plans-grid" id="plansGrid">
+                <!-- License plan cards will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Application Form Section -->
+    <section class="application-section">
+        <div class="container">
+            <h2>Gun License Application</h2>
+            <form id="licenseForm" class="license-form">
+                <div class="form-group">
+                    <label for="applicantName">Full Name:</label>
+                    <input 
+                        type="text" 
+                        id="applicantName" 
+                        name="applicantName" 
+                        required
+                        placeholder="Enter your full name"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="applicantID">Character ID:</label>
+                    <input 
+                        type="text" 
+                        id="applicantID" 
+                        name="applicantID" 
+                        required
+                        placeholder="Enter your character ID"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="planSelect">License Plan:</label>
+                    <select id="planSelect" name="planSelect" required>
+                        <option value="">Select a plan...</option>
+                        <option value="Basic">Basic License</option>
+                        <option value="Advanced">Advanced License</option>
+                        <option value="Professional">Professional License</option>
+                        <option value="Tactical">Tactical License</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="applicantReason">Reason for Application:</label>
+                    <textarea 
+                        id="applicantReason" 
+                        name="applicantReason" 
+                        rows="5" 
+                        required
+                        placeholder="Explain why you need this license..."
+                    ></textarea>
+                </div>
+
+                <div class="form-group checkbox">
+                    <input 
+                        type="checkbox" 
+                        id="termsAgree" 
+                        name="termsAgree" 
+                        required
+                    >
+                    <label for="termsAgree">I agree to follow all LSPD regulations and terms</label>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit Application</button>
+                <div id="formMessage" class="form-message"></div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>LSPD Roleplay</h4>
+                    <p>&copy; 2024 Los Santos Police Department. All rights reserved.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="members.html">Members</a></li>
+                        <li><a href="duty-items.html">Equipment</a></li>
+                        <li><a href="vehicles.html">Vehicles</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Community</h4>
+                    <ul>
+                        <li><a href="#" target="_blank">Discord</a></li>
+                        <li><a href="#" target="_blank">Contact</a></li>
+                        <li><a href="mailto:contact@lspd-rp.com">Email</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>MTA:SA Roleplay Server | Professional Law Enforcement Community</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
