@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - LSPD</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0D1B2A 0%, #1B263B 100%);
+            padding: 2rem;
+        }
+
+        .login-box {
+            background: linear-gradient(135deg, #1B263B 0%, #0D1B2A 100%);
+            border: 2px solid #0EA5E9;
+            border-radius: 12px;
+            padding: 3rem;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: scaleIn 0.5s ease-out;
+        }
+
+        .login-box h1 {
+            color: #0EA5E9;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            font-size: 2rem;
+        }
+
+        .login-box .subtitle {
+            color: #94A3B8;
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: #0EA5E9;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: var(--color-dark-navy);
+            border: 2px solid #415A77;
+            border-radius: 8px;
+            color: var(--color-white);
+            font-family: var(--font-primary);
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #0EA5E9;
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, #0EA5E9 0%, #06B6D4 100%);
+            border: none;
+            border-radius: 8px;
+            color: var(--color-dark-navy);
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(14, 165, 233, 0.4);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .error-message {
+            color: #EF4444;
+            background-color: rgba(239, 68, 68, 0.1);
+            border: 2px solid #EF4444;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            display: none;
+            text-align: center;
+        }
+
+        .error-message.show {
+            display: block;
+            animation: fadeInUp 0.3s ease-out;
+        }
+
+        .success-message {
+            color: #10B981;
+            background-color: rgba(16, 185, 129, 0.1);
+            border: 2px solid #10B981;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            display: none;
+            text-align: center;
+        }
+
+        .success-message.show {
+            display: block;
+            animation: fadeInUp 0.3s ease-out;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .back-link a {
+            color: #0EA5E9;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .back-link a:hover {
+            color: #06B6D4;
+            text-decoration: underline;
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .login-box {
+                padding: 2rem;
+            }
+
+            .login-box h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <h1>🔐 ADMIN LOGIN</h1>
+            <p class="subtitle">Los Santos Police Department</p>
+            
+            <div class="error-message" id="errorMessage"></div>
+            <div class="success-message" id="successMessage"></div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        placeholder="Enter your email" 
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        placeholder="Enter your password" 
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="login-btn">Login</button>
+            </form>
+
+            <div class="back-link">
+                <a href="index.html">← Back to Home</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Admin credentials
+        const ADMIN_EMAIL = 'mouaddx1@gmail.com';
+        const ADMIN_PASSWORD = 'mouaddx1';
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
+
+            // Clear messages
+            errorMessage.classList.remove('show');
+            successMessage.classList.remove('show');
+
+            // Validate credentials
+            if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+                // Store session
+                localStorage.setItem('adminSession', JSON.stringify({
+                    email: email,
+                    loginTime: new Date().getTime(),
+                    isAdmin: true
+                }));
+
+                // Show success message
+                successMessage.textContent = '✓ Login successful! Redirecting...';
+                successMessage.classList.add('show');
+
+                // Redirect to admin dashboard
+                setTimeout(() => {
+                    window.location.href = 'admin-dashboard.html';
+                }, 1500);
+            } else {
+                // Show error message
+                errorMessage.textContent = '✗ Invalid email or password!';
+                errorMessage.classList.add('show');
+
+                // Clear password field
+                document.getElementById('password').value = '';
+            }
+        });
+
+        // Check if already logged in
+        window.addEventListener('load', function() {
+            const session = JSON.parse(localStorage.getItem('adminSession') || 'null');
+            if (session && session.isAdmin) {
+                window.location.href = 'admin-dashboard.html';
+            }
+        });
+    </script>
+</body>
+</html>

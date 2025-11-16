@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - LSPD</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+            background-color: var(--color-dark-navy);
+        }
+
+        .admin-sidebar {
+            width: 250px;
+            background: linear-gradient(180deg, #1B263B 0%, #0D1B2A 100%);
+            border-right: 2px solid #0EA5E9;
+            padding: 2rem 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .admin-sidebar h2 {
+            color: #0EA5E9;
+            padding: 0 1.5rem;
+            margin-bottom: 2rem;
+            font-size: 1.2rem;
+            text-align: center;
+            border-bottom: 2px solid #415A77;
+            padding-bottom: 1rem;
+        }
+
+        .admin-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .admin-menu li {
+            margin: 0;
+        }
+
+        .admin-menu a {
+            display: block;
+            padding: 1rem 1.5rem;
+            color: #94A3B8;
+            text-decoration: none;
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .admin-menu a:hover,
+        .admin-menu a.active {
+            background-color: rgba(14, 165, 233, 0.1);
+            border-left-color: #0EA5E9;
+            color: #0EA5E9;
+        }
+
+        .admin-logout {
+            position: absolute;
+            bottom: 2rem;
+            left: 1.5rem;
+            right: 1.5rem;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: calc(100% - 3rem);
+        }
+
+        .admin-logout:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.3);
+        }
+
+        .admin-main {
+            margin-left: 250px;
+            flex: 1;
+            padding: 2rem;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #415A77;
+        }
+
+        .admin-header h1 {
+            color: #0EA5E9;
+            margin: 0;
+        }
+
+        .admin-header .user-info {
+            color: #94A3B8;
+            font-size: 0.9rem;
+        }
+
+        .admin-content {
+            display: none;
+        }
+
+        .admin-content.active {
+            display: block;
+            animation: fadeInUp 0.3s ease-out;
+        }
+
+        .section-title {
+            color: #0EA5E9;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .add-btn {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+        }
+
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: linear-gradient(135deg, #1B263B 0%, #0D1B2A 100%);
+            border: 2px solid #415A77;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .admin-table thead {
+            background-color: rgba(14, 165, 233, 0.1);
+        }
+
+        .admin-table th {
+            color: #0EA5E9;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #415A77;
+        }
+
+        .admin-table td {
+            color: #94A3B8;
+            padding: 1rem;
+            border-bottom: 1px solid #415A77;
+        }
+
+        .admin-table tr:hover {
+            background-color: rgba(14, 165, 233, 0.05);
+        }
+
+        .action-btn {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+        }
+
+        .edit-btn {
+            background-color: #0EA5E9;
+            color: var(--color-dark-navy);
+        }
+
+        .edit-btn:hover {
+            background-color: #06B6D4;
+        }
+
+        .delete-btn {
+            background-color: #EF4444;
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background-color: #DC2626;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+            animation: fadeInUp 0.3s ease-out;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1B263B 0%, #0D1B2A 100%);
+            border: 2px solid #0EA5E9;
+            border-radius: 12px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #415A77;
+        }
+
+        .modal-header h2 {
+            color: #0EA5E9;
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: #0EA5E9;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: #06B6D4;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: #0EA5E9;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: var(--color-dark-navy);
+            border: 2px solid #415A77;
+            border-radius: 8px;
+            color: var(--color-white);
+            font-family: var(--font-primary);
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #0EA5E9;
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-cancel {
+            background-color: #415A77;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cancel:hover {
+            background-color: #4A6278;
+        }
+
+        .request-card {
+            background: linear-gradient(135deg, #1B263B 0%, #0D1B2A 100%);
+            border: 2px solid #415A77;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .request-card:hover {
+            border-color: #0EA5E9;
+            box-shadow: 0 10px 25px rgba(14, 165, 233, 0.1);
+        }
+
+        .request-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #415A77;
+        }
+
+        .request-header h3 {
+            color: #0EA5E9;
+            margin: 0;
+        }
+
+        .request-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background-color: rgba(245, 158, 11, 0.2);
+            color: #F59E0B;
+        }
+
+        .status-approved {
+            background-color: rgba(16, 185, 129, 0.2);
+            color: #10B981;
+        }
+
+        .status-rejected {
+            background-color: rgba(239, 68, 68, 0.2);
+            color: #EF4444;
+        }
+
+        .request-details {
+            color: #94A3B8;
+            margin-bottom: 1rem;
+        }
+
+        .request-details p {
+            margin: 0.5rem 0;
+        }
+
+        .request-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-approve {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+
+        .btn-approve:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-reject {
+            background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+
+        .btn-reject:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.3);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .admin-container {
+                flex-direction: column;
+            }
+
+            .admin-sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-right: none;
+                border-bottom: 2px solid #0EA5E9;
+            }
+
+            .admin-main {
+                margin-left: 0;
+                padding: 1rem;
+            }
+
+            .admin-logout {
+                position: relative;
+                bottom: auto;
+                left: auto;
+                right: auto;
+                margin-top: 1rem;
+                width: calc(100% - 3rem);
+            }
+
+            .admin-table {
+                font-size: 0.85rem;
+            }
+
+            .admin-table th,
+            .admin-table td {
+                padding: 0.75rem;
+            }
+
+            .action-btn {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <div class="admin-sidebar">
+            <h2>⚙️ ADMIN PANEL</h2>
+            <ul class="admin-menu">
+                <li><a class="menu-item active" data-section="dashboard">📊 Dashboard</a></li>
+                <li><a class="menu-item" data-section="members">👮 Members</a></li>
+                <li><a class="menu-item" data-section="ranks">⭐ Ranks</a></li>
+                <li><a class="menu-item" data-section="gun-plans">🔫 Gun Plans</a></li>
+                <li><a class="menu-item" data-section="requests">📋 Gun Requests</a></li>
+            </ul>
+            <button class="admin-logout" id="logoutBtn">🚪 Logout</button>
+        </div>
+
+        <!-- Main Content -->
+        <div class="admin-main">
+            <div class="admin-header">
+                <h1>Admin Dashboard</h1>
+                <div class="user-info">
+                    <p id="userEmail">Logged in as: <strong>mouaddx1@gmail.com</strong></p>
+                </div>
+            </div>
+
+            <!-- Dashboard Section -->
+            <div class="admin-content active" id="dashboard">
+                <h2 class="section-title">📊 Dashboard Overview</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+                    <div style="background: linear-gradient(135deg, #1B263B 0%, #0D1B2A 100%); border: 2px solid #0EA5E9; border-radius: 8px; padding: 1.5rem; text-align: center;">
+                        <div style="color: #0EA5E9; font-size: 2rem; margin-bottom: 0.5rem;">👮</div>
+                        <div style="color: #94A3B8; font-size: 0.9rem;">Total Members</div>
+                        <div style="color: #0EA5E9; font-size: 1.5rem; font-weight: 700;" id="totalMembers">6</div>
+                    </div>
+                    <div style="background: linear-gradient(135deg, #1B263B 0%, #0D1B2A 100%); border: 2px solid #0EA5E9; border-radius: 8px; padding: 1.5rem; text-align: center;">
+                        <div style="color: #0EA5E9; font-size: 2rem; margin-bottom: 0.5rem;">⭐</div>
+                        <div style="color: #94A3B8; font-size: 0.9rem;">Total Ranks</div>
+                        <div style="color: #0EA5E9; font-size: 1.5rem; font-weight: 700;" id="totalRanks">6</div>
+                    </div>
+                    <div style="background: linear-gradient(135deg, #1B263B 0%, #0D1B2A 100%); border: 2px solid #0EA5E9; border-radius: 8px; padding: 1.5rem; text-align: center;">
+                        <div style="color: #0EA5E9; font-size: 2rem; margin-bottom: 0.5rem;">🔫</div>
+                        <div style="color: #94A3B8; font-size: 0.9rem;">Gun Plans</div>
+                        <div style="color: #0EA5E9; font-size: 1.5rem; font-weight: 700;" id="totalGunPlans">3</div>
+                    </div>
+                    <div style="background: linear-gradient(135deg, #1B263B 0%, #0D1B2A 100%); border: 2px solid #0EA5E9; border-radius: 8px; padding: 1.5rem; text-align: center;">
+                        <div style="color: #0EA5E9; font-size: 2rem; margin-bottom: 0.5rem;">📋</div>
+                        <div style="color: #94A3B8; font-size: 0.9rem;">Pending Requests</div>
+                        <div style="color: #F59E0B; font-size: 1.5rem; font-weight: 700;" id="pendingRequests">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Members Section -->
+            <div class="admin-content" id="members">
+                <h2 class="section-title">👮 Manage Members</h2>
+                <button class="add-btn" onclick="openMemberModal()">+ Add New Member</button>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Rank</th>
+                            <th>Badge #</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="membersTableBody">
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Ranks Section -->
+            <div class="admin-content" id="ranks">
+                <h2 class="section-title">⭐ Manage Ranks</h2>
+                <button class="add-btn" onclick="openRankModal()">+ Add New Rank</button>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Rank Name</th>
+                            <th>Level</th>
+                            <th>Salary</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ranksTableBody">
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Gun Plans Section -->
+            <div class="admin-content" id="gun-plans">
+                <h2 class="section-title">🔫 Manage Gun Plans</h2>
+                <button class="add-btn" onclick="openGunPlanModal()">+ Add New Plan</button>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Plan Name</th>
+                            <th>Price</th>
+                            <th>Weapons</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="gunPlansTableBody">
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Gun Requests Section -->
+            <div class="admin-content" id="requests">
+                <h2 class="section-title">📋 Gun License Requests</h2>
+                <div id="requestsContainer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Member Modal -->
+    <div class="modal" id="memberModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="memberModalTitle">Add Member</h2>
+                <button class="modal-close" onclick="closeMemberModal()">×</button>
+            </div>
+            <form id="memberForm">
+                <div class="form-group">
+                    <label for="memberName">Member Name</label>
+                    <input type="text" id="memberName" required>
+                </div>
+                <div class="form-group">
+                    <label for="memberRank">Rank</label>
+                    <select id="memberRank" style="width: 100%; padding: 0.75rem; background-color: var(--color-dark-navy); border: 2px solid #415A77; border-radius: 8px; color: var(--color-white);" required>
+                        <option value="">Select Rank</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="memberBadge">Badge Number</label>
+                    <input type="number" id="memberBadge" required>
+                </div>
+                <div class="form-group">
+                    <label for="memberStatus">Status</label>
+                    <select id="memberStatus" style="width: 100%; padding: 0.75rem; background-color: var(--color-dark-navy); border: 2px solid #415A77; border-radius: 8px; color: var(--color-white);" required>
+                        <option value="Active">Active</option>
+                        <option value="On Leave">On Leave</option>
+                        <option value="Suspended">Suspended</option>
+                    </select>
+                </div>
+                <div class="form-buttons">
+                    <button type="button" class="btn-cancel" onclick="closeMemberModal()">Cancel</button>
+                    <button type="submit" class="btn-save">Save Member</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Rank Modal -->
+    <div class="modal" id="rankModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="rankModalTitle">Add Rank</h2>
+                <button class="modal-close" onclick="closeRankModal()">×</button>
+            </div>
+            <form id="rankForm">
+                <div class="form-group">
+                    <label for="rankName">Rank Name</label>
+                    <input type="text" id="rankName" required>
+                </div>
+                <div class="form-group">
+                    <label for="rankLevel">Level</label>
+                    <input type="number" id="rankLevel" required>
+                </div>
+                <div class="form-group">
+                    <label for="rankSalary">Salary</label>
+                    <input type="number" id="rankSalary" required>
+                </div>
+                <div class="form-buttons">
+                    <button type="button" class="btn-cancel" onclick="closeRankModal()">Cancel</button>
+                    <button type="submit" class="btn-save">Save Rank</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Gun Plan Modal -->
+    <div class="modal" id="gunPlanModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="gunPlanModalTitle">Add Gun Plan</h2>
+                <button class="modal-close" onclick="closeGunPlanModal()">×</button>
+            </div>
+            <form id="gunPlanForm">
+                <div class="form-group">
+                    <label for="gunPlanName">Plan Name</label>
+                    <input type="text" id="gunPlanName" required>
+                </div>
+                <div class="form-group">
+                    <label for="gunPlanPrice">Price</label>
+                    <input type="number" id="gunPlanPrice" required>
+                </div>
+                <div class="form-group">
+                    <label for="gunPlanWeapons">Weapons (comma separated)</label>
+                    <textarea id="gunPlanWeapons" rows="3" required></textarea>
+                </div>
+                <div class="form-buttons">
+                    <button type="button" class="btn-cancel" onclick="closeGunPlanModal()">Cancel</button>
+                    <button type="submit" class="btn-save">Save Plan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>

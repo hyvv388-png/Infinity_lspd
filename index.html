@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="LSPD Roleplay Community - Professional law enforcement roleplay server for MTA:SA. Join the force and become part of the Los Santos Police Department.">
+    <meta name="keywords" content="LSPD, roleplay, MTA:SA, police, Los Santos, law enforcement">
+    <meta name="author" content="LSPD Roleplay Community">
+    
+    <!-- Open Graph Protocol for Social Media -->
+    <meta property="og:title" content="LSPD Roleplay Community">
+    <meta property="og:description" content="Professional law enforcement roleplay server for MTA:SA. Join the Los Santos Police Department.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://lspd-rp.example.com">
+    <meta property="og:image" content="https://lspd-rp.example.com/og-image.jpg">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="LSPD Roleplay Community">
+    <meta name="twitter:description" content="Professional law enforcement roleplay server for MTA:SA">
+    
+    <title>LSPD Roleplay Community - Los Santos Police Department</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="logo">
+                    <span class="logo-text">LSPD</span>
+                </div>
+                <button class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html" class="nav-link active">Home</a></li>
+                    <li><a href="members.html" class="nav-link">Members</a></li>
+                    <li><a href="duty-items.html" class="nav-link">Duty Equipment</a></li>
+                    <li><a href="vehicles.html" class="nav-link">Vehicles</a></li>
+                    <li><a href="gun-license.html" class="nav-link">Gun License</a></li>
+                </ul>
+            </div>
+        </div>
+    <a href="login.html" style="color: #EF4444; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;">🔐 Admin</a></nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Los Santos Police Department</h1>
+            <p class="hero-subtitle">Professional Law Enforcement Roleplay</p>
+            <button class="btn btn-primary" onclick="scrollToSection('about')">Join the Force</button>
+        </div>
+        <div class="hero-overlay"></div>
+    </header>
+
+    <!-- Server Info Banner -->
+    <section class="server-banner">
+        <div class="container">
+            <div class="server-info">
+                <div class="info-item">
+                    <span class="info-label">Server IP:</span>
+                    <span class="info-value">mtasa://127.0.0.1:22003</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Players Online:</span>
+                    <span class="info-value" id="playerCount">Loading...</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Status:</span>
+                    <span class="info-value status-online">Online</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <h2>About LSPD</h2>
+            <div class="about-grid">
+                <div class="about-card">
+                    <h3>Our Mission</h3>
+                    <p>The Los Santos Police Department is dedicated to providing professional law enforcement roleplay experiences. We maintain the highest standards of conduct, integrity, and service to the community.</p>
+                </div>
+                <div class="about-card">
+                    <h3>Core Values</h3>
+                    <p>Integrity, professionalism, and community service are the foundation of our department. We believe in fair roleplay, respectful interactions, and creating an immersive law enforcement experience.</p>
+                </div>
+                <div class="about-card">
+                    <h3>RP Goals</h3>
+                    <p>We aim to create realistic law enforcement scenarios, promote teamwork, and deliver engaging roleplay experiences. Every member contributes to building an authentic police department community.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Links Section -->
+    <section class="quick-links">
+        <div class="container">
+            <h2>Quick Navigation</h2>
+            <div class="links-grid">
+                <a href="members.html" class="link-card">
+                    <h3>View Members</h3>
+                    <p>Browse our officers and their records</p>
+                </a>
+                <a href="duty-items.html" class="link-card">
+                    <h3>Duty Equipment</h3>
+                    <p>Check equipment by rank</p>
+                </a>
+                <a href="vehicles.html" class="link-card">
+                    <h3>Duty Vehicles</h3>
+                    <p>Explore our vehicle fleet</p>
+                </a>
+                <a href="gun-license.html" class="link-card">
+                    <h3>Gun License Plans</h3>
+                    <p>Apply for your license</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>LSPD Roleplay</h4>
+                    <p>&copy; 2024 Los Santos Police Department. All rights reserved.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="members.html">Members</a></li>
+                        <li><a href="duty-items.html">Equipment</a></li>
+                        <li><a href="vehicles.html">Vehicles</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Community</h4>
+                    <ul>
+                        <li><a href="#" target="_blank">Discord</a></li>
+                        <li><a href="#" target="_blank">Contact</a></li>
+                        <li><a href="mailto:contact@lspd-rp.com">Email</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>MTA:SA Roleplay Server | Professional Law Enforcement Community</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
